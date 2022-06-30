@@ -7,7 +7,7 @@ class Solution:
         curr = []
         def recurse(index: int):
             if index >= len(nums):
-                result.append(curr)
+                result.append(curr.copy())
                 return
             
             else:
