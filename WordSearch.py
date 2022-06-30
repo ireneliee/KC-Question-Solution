@@ -3,45 +3,35 @@ from typing import List
 
 class Solution:
     def exist(self, board: List[List[str]], word: str) -> bool:
-        if word == "":
-            return False
-        
-        x_coor = [-1,0,0,1]
-        y_coor = [0,-1,1,0]
-        
-        def backtrack(x, y, history, word_left):
-            result = False
-            if len(word_left) == 0:
+        rows, cols = len(board), len(board[0])
+        path = set()
+
+        def dfs(r, c, i):
+            if i == len(word):
                 return True
-            history.append((x,y))
+            if(r < 0 or c <0 or r >= rows or c >= cols or word[i] != board[r][c] or (r, c) in path):
+                return False
             
-            #check if there's somewhere you can go
-            next = word_left[0]
-            for i in range(len(x_coor)):
-                go_to_x = x + x_coor[i]
-                go_to_y = y + y_coor[i]
-                print('(' + str(go_to_x) + ',' + str(go_to_y) + ')')
+            path.add((r,c))
 
-                if (0 <= go_to_x < len(board)) and (0 <= go_to_y <len(board[go_to_x])) and (board[go_to_x][go_to_y] == next) and (history.count((go_to_x,go_to_y)) == 0):
-                    print('reach here')
-                    print(word_left[1:])
-                    result = backtrack(go_to_x, go_to_y, history, word_left[1:])
-
-            return result  
-
-        for i in range(len(board)):
-            for j in range(len(board[i])):
-                if board[i][j] == word[0]:
-                    #print('visiting x: ' + str(i) + ' y: ' + str(j))
-                    if(backtrack(i, j, [], word[1:])):
-                        return True
+            res = (
+                dfs(r + 1, c, i + 1) or
+                dfs(r - 1, c, i + 1) or
+                dfs(r, c + 1, i + 1) or
+                dfs(r, c - 1, i + 1))
+            path.remove((r, c))
+            return res
         
+        for r in range(rows):
+            for c in range(cols):
+                if dfs(r, c, 0): return True
         return False
+
 
         
 
 sol = Solution()
-test_case_1 = [["C","A","A"],["A","A","A"],["B","C","D"]]
-test_case_2 = "AAB"
+test_case_1 = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]]
+test_case_2 = "SEE"
 
 print(sol.exist(test_case_1, test_case_2))
