@@ -4,12 +4,7 @@ class HashMap:
         self.bucket_array = [None for _ in range(initial_size)]
         self.p = 31
         self.num_entries = 0
-    
-    '''
-    Separate chaining:
-    In case of collision, the `put()` function uses the same bucket to store a linked list of key-value pairs. 
-    Every bucket will have it's own separate chain of linked list nodes.
-    '''  
+
 
     def put(self, key, value):                                     
         bucket_index = self.get_bucket_index(key)   
