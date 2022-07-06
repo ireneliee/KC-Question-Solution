@@ -1,45 +1,50 @@
 from dataclasses import dataclass, field
-from heapq import heappop, heappush, heapreplace
+from heapq import heapify, heappop, heappush, heapreplace
 from typing import Any, List
 
     
 class Solution:
     def topKFrequent(self, nums: List[int], k: int) -> List[int]:
         
-        pq = []                         # list of entries arranged in a heap
+        pq = []
+        heapify(pq)                         # list of entries arranged in a heap
         entry_finder = {}               # mapping of tasks to entries
         
         for i in range(len(nums)):
+            print('when nums is ' + str(nums[i]))
             if nums[i] in entry_finder:
+                print('Can find the number inside dict')
                 entry = entry_finder[nums[i]]
                 count = entry[0]
-                del(entry_finder[nums[i]])
                 
             else:
+                print('Cannot find the number inside dict')
                 count = 0
             
-            entry = [count + 1, nums[i]]
+            
+            entry = [count - 1, nums[i]]
+            print('Entry is ' + str(entry))
             entry_finder[nums[i]] = entry
         
-            if pq:
-                topmost_entry = pq[0]
-                if count > topmost_entry[0]:
-                    heapreplace(pq, entry)
-            else:
-                heappush(pq, entry)
+            print('just pushing ' + str(entry))
+            heappush(pq, entry)
         
         result = []
-        
-        for i in range(len(pq)):
+        rank = 0
+        print(str(pq))
+        while pq and rank < k:
             entry = heappop(pq)
-            result.append(entry[i])
+            print('popped ' + str(entry))
+            if entry[1] not in result:
+                result.append(entry[1])
+                rank = rank + 1
         
         return result
 
 sol = Solution()
 
 # test case
-arr = [1,1,1,2,2,3]
-k = 2
+arr = [1,1,2,3,4,52,1,2,3,4]
+k = 3
 
 print(sol.topKFrequent(arr, k))
