@@ -53,9 +53,9 @@ class Solution:
 
 sol = Solution()
 nums = [1,2,2,2,2,2,4,5,6,9,9]
-print('Length is ' + str(len(nums)))
+# print('Length is ' + str(len(nums)))
 target = 7
-print(sol.searchRange(nums,target))
+# print(sol.searchRange(nums,target))
 
 # if number cant be found
 # if number is at the last
