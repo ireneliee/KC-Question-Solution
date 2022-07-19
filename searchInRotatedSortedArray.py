@@ -8,10 +8,11 @@ class Solution:
 
 
         def binarySearchPivotIndex(l, r):
-            print('l is ' + str(l))
-            print('r is ' + str(r))
+            
             
             while l <= r:
+                # print('l is ' + str(l))
+                # print('r is ' + str(r))
 
                 mid = (l + r) // 2
 
@@ -21,10 +22,13 @@ class Solution:
                     return binarySearchPivotIndex(mid + 1, r)
                 elif mid + 1 < len(nums) and nums[mid] < nums[mid + 1] and nums[mid] <= last_num:
                     return binarySearchPivotIndex(l, mid - 1)
+                elif mid == l and mid == r:
+                    return len(nums) - 1
 
             return -1
-        
+        # print('Finding pivot index...')
         pivotIndex = binarySearchPivotIndex(0, len(nums) - 1)
+        # print('Pivot is ' + str(pivotIndex))
         
         def normalBinarySearch(arr, l, r):
 
@@ -59,6 +63,6 @@ class Solution:
 
 
 sol = Solution()
-nums = [1,2,3,4,5,6,7]
-target_index = sol.search(nums, 2)
+nums = [1]
+target_index = sol.search(nums, 0)
 print('Target index is ' + str(target_index))
