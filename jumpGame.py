@@ -5,16 +5,24 @@ from numpy import true_divide
 
 class Solution:
     def canJump(self, nums: List[int]) -> bool:
-        currInd = len(nums) - 1
+        if len(nums) == 1:
+            return True
 
-        while currInd > 0:
-            if currInd - 1 >= 0 and nums[currInd - 1] + (currInd - 1) < currInd:
+        def reachable(startInd, endInd):
+            print('start index is ' + str(startInd))
+            print('end index is ' + str(endInd))
+            if endInd == 0:
+                return True
+            elif startInd < 0:
                 return False
-            else:
-                currInd = currInd - 1
-        
-        return True
+            elif startInd >= 0 and startInd + nums[startInd] >= endInd:
+                return reachable(startInd - 1, startInd)
+            elif startInd >= 0 and startInd + nums[startInd] < endInd:
+                return reachable(startInd - 1, endInd)
+
+        return reachable(len(nums) - 2, len(nums) - 1)   
 
 sol = Solution()
-arr = [1,2]
+arr = [2, 0, 0]
+arr = [3,2,1,1,4]
 print(sol.canJump(arr))
