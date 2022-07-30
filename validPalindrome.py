@@ -1,9 +1,5 @@
-from collections import deque
-
-
 class Solution:
     def isPalindrome(self, s: str) -> bool:
-        stack = deque()
         ori = ""
         for i in range(len(s)):
             curr = s[i].lower()
