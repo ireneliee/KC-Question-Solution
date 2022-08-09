@@ -14,7 +14,6 @@ class Trie:
 
         def insertUtil(root, value):
          
-            # Step 1 - Perform normal BST
             if not root:
                 return TreeNode(value)
             elif value < root.val:
@@ -22,30 +21,26 @@ class Trie:
             else:
                 root.right = insertUtil(root.right, value)
     
-            # Step 2 - Update the height of the
-            # ancestor node
+
             root.height = 1 + max(self.getHeight(root.left),self.getHeight(root.right))
     
-            # Step 3 - Get the balance factor
+
             balance = self.getBalance(root)
     
-            # Step 4 - If the node is unbalanced,
-            # then try out the 4 cases
 
-            # Case 1 - Right Rotate
             if balance > 1 and value < root.left.val:
                 return self.rightRotate(root)
     
-            # Case 2 - Left Rotate
+
             if balance < -1 and value > root.right.val:
                 return self.leftRotate(root)
     
-            # Case 3 - Left Right rotate
+
             if balance > 1 and value > root.left.val:
                 root.left = self.leftRotate(root.left)
                 return self.rightRotate(root)
     
-            # Case 4 - Right Left rotate
+
             if balance < -1 and value < root.right.val:
                 root.right = self.rightRotate(root.right)
                 return self.leftRotate(root)
@@ -65,11 +60,11 @@ class Trie:
         tempRightChild.left = node 
         node.right = t
 
-        # Update heights
+
         node.height = 1 + max(self.getHeight(node.left),self.getHeight(node.right))
         tempRightChild.height = 1 + max(self.getHeight(tempRightChild.left),self.getHeight(tempRightChild.right))
 
-        # Return the new root
+
         return tempRightChild
 
     def rightRotate(self, node):
@@ -79,15 +74,15 @@ class Trie:
         tempLeftChild = node.left 
         t = tempLeftChild.right  
 
-        # Perform rotation
+
         tempLeftChild.right = node 
         node.left = t               
 
-        # Update heights
+
         node.height = 1 + max(self.getHeight(node.left), self.getHeight(node.right))
         tempLeftChild.height = 1 + max(self.getHeight(tempLeftChild.left), self.getHeight(tempLeftChild.right))
 
-        # Return the new root
+
         return tempLeftChild
 
     def getBalance(self, root):
@@ -103,17 +98,47 @@ class Trie:
         return root.height    
 
     def search(self, word: str) -> bool:
-        pass
+        def searchUtil(node, word):
+            if node.val == word:
+                return True
+            elif word > node.val:
+                if node.right is not None:
+                    return searchUtil(node.right, word)
+                else:
+                    return False
+            else:
+                if node.left is not None:
+                    return searchUtil(node.left, word)
+                else:
+                    return False
+        
+        return searchUtil(self.root, word)
 
     def startsWith(self, prefix: str) -> bool:
-        pass
+        def startsWithUtil(node: TreeNode, prefix: str) -> bool:
+            prefix_len = len(prefix)
+
+            if node.val[:prefix_len] == prefix:
+                return True
+            elif prefix > node.val[:prefix_len]:
+                if node.right is not None:
+                    return startsWithUtil(node.right, prefix)
+                else:
+                    return False
+            else:
+                if node.left is not None:
+                    return startsWithUtil(node.left, prefix)
+                else:
+                    return False
+
+        return startsWithUtil(self.root, prefix)
+
 
     def preOrder(self):
         
         def preOrderUtil(root):
             if not root:
                 return
-            print("reach here")
             print("{0} ".format(root.val), end="")
             preOrderUtil(root.left)
             preOrderUtil(root.right)
@@ -124,7 +149,9 @@ class Trie:
 # Your Trie object will be instantiated and called as such:
 obj = Trie()
 obj.insert("apple")
+print(obj.search("app"))
+print(obj.startsWith("app"))
 obj.insert("app")
-obj.preOrder()
+print(obj.search("app"))
 # param_2 = obj.search(word)
 # param_3 = obj.startsWith(prefix)
