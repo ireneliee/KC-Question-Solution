@@ -4,7 +4,8 @@ from typing import List
 
 class Solution:
     def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
-
+        if len(prerequisites) < numCourses:
+            return False
         def isCycle(node, visited, recStack):
             visited[node] = True
             recStack[node] = True
@@ -16,7 +17,7 @@ class Solution:
                     list_of_neighbors.append(prerequisites[i][0])
             
             for i in range(len(list_of_neighbors)):
-                if visited[i] == False:
+                if visited[i] == False:  
                     if isCycle(i, visited, recStack) == True:
                         return True
                 elif recStack[i] == False:

@@ -98,6 +98,8 @@ class Trie:
         return root.height    
 
     def search(self, word: str) -> bool:
+        if self.root is None:
+            return False
         def searchUtil(node, word):
             if node.val == word:
                 return True
@@ -115,6 +117,8 @@ class Trie:
         return searchUtil(self.root, word)
 
     def startsWith(self, prefix: str) -> bool:
+        if self.root is None:
+            return False
         def startsWithUtil(node: TreeNode, prefix: str) -> bool:
             prefix_len = len(prefix)
 

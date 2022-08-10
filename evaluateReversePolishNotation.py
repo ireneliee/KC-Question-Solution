@@ -5,7 +5,7 @@ class Solution:
     def evalRPN(self, tokens: List[str]) -> int:
         num_stack = Deque()
         for i in range(len(tokens)):
-            print('when token is '  + tokens[i])
+            # print('when token is '  + tokens[i])
             if tokens[i] == "+":
                 b = num_stack.popleft()
                 a = num_stack.popleft()
@@ -29,7 +29,7 @@ class Solution:
             else:
                 num_stack.appendleft(tokens[i])
 
-            print(str(num_stack))
+            # print(str(num_stack))
         return num_stack.popleft()
 
 sol = Solution()
