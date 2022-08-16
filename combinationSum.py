@@ -1,3 +1,4 @@
+
 from typing import List
 
 
@@ -9,24 +10,28 @@ class Solution:
         candidates.sort()
 
         def helper(i: int, currTar: int, currList: List[int]):
-            for i in range(i, len(candidates)):
-                currSum = currTar - candidates[i]
-                currList.append(currSum)
-                if currSum == 0:
-                    result.append(currList)
-                    return
-                elif currSum < 0:
-                    return
-                else:
-                    helper(i + 1, currSum, currList.copy)
+            currSum = currTar - candidates[i]
+            if currSum == 0:
+                currList.append(candidates[i])
+                result.append(currList)
+                return
+            elif currSum < 0:
+                return
+            else:
+                currList.append(candidates[i])
+                for k in range(i, len(candidates)):
+                    helper(k, currSum, currList.copy())
         
-        helper(0, target, [])
+        for i in range(len(candidates)):
+            helper(i, target, [])
 
         return result
+        
+        
 
 sol = Solution()
-candidates = [2,3,6,7]
-target = 7
+candidates = [2]
+target = 1
 print(sol.combinationSum(candidates, target))
 
         
