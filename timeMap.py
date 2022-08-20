@@ -1,12 +1,17 @@
 class TimeMap:
 
     def __init__(self):
-        pass
+        self.timemap_dict = {}
         
 
     def set(self, key: str, value: str, timestamp: int) -> None:
-        pass
+        if key not in self.timemap_dict:
+            self.timemap_dict[key] = {}
+            
+        self.timemap_dict[key][timestamp] = value
+
         
+
 
     def get(self, key: str, timestamp: int) -> str:
         pass

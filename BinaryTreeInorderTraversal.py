@@ -15,7 +15,7 @@ class Solution:
         result = []
         
         if root is None:
-            return result;
+            return result
         
         
         def traverse(root: Optional[TreeNode], result: List[int]):
