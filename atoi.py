@@ -2,11 +2,17 @@ class Solution:
     def myAtoi(self, s: str) -> int:
         numb = ""
         isNegative = False
+        isInvalid = False
         for i in range(len(s)):
             if 48 <= ord(s[i]) <= 57:
                 numb = numb + s[i]
-            if s[i] == '-':
+            elif s[i] == '-':
                 isNegative = True
+            elif (s[i] < 48 or s[i] > 57) and numb == "":
+                isInvalid = True
+        
+        if isInvalid:
+            return 0
         if isNegative:
             numb_result = int(numb) * -1
         else:
