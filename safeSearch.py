@@ -82,6 +82,7 @@ def checkQueries(keywords, unsafeWords, queries):
         unsafeWord_trie.insert(item)
     
     for word in queries:
+        ans = process(word)
         result.append(process[word])
     
     return result

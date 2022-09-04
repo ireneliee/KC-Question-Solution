@@ -24,12 +24,10 @@ class Solution:
             curr_str = s[start: end]
             if anagramTest(curr_str):
                 result.append(start)
-                print('Its an anagram ' + str(s[start:end]))
                 while True:
                     end = end + 1
                     if end < len_of_string and s[start] == s[end - 1]:
                         start = start + 1
-                        print('enter here '+ s[start:end] )
                         result.append(start)
                     else:
                         start = start + 1
