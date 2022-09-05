@@ -9,53 +9,83 @@ from typing import List
 
 class Solution:
     def findMinHeightTrees(self, n: int, edges: List[List[int]]) -> List[int]:
-        # converting to adjacency list
-        adjacency_list = {}
+        if n <= 2:
+            return [x for x in range(n)]
+        neighbors = [set() for x in range(n)]
+        for start, end in edges:
+            neighbors[start].add(end)
+            neighbors[end].add(start)
+
+        leaves = []
         for i in range(n):
-            adjacency_list[i] = []
+            if len(neighbors[i]) == 1:
+                leaves.append(i)
+        remaining_nodes = n
+
+        while remaining_nodes > 2:
+            remaining_nodes -= len(leaves)
+            temp = []
+
+            for leaf in leaves:
+                for neighbor in neighbors[leaf]:
+                    neighbors[neighbor].remove(leaf)
+
+                    if len(neighbors[neighbor])==1:
+                        temp.append(neighbor)
+            
+            leaves = temp
         
-        for item in edges:
-            from_node = item[0]
-            to_node = item[1]
+        return leaves
 
-            adjacency_list[from_node].append(to_node)
-            adjacency_list[to_node].append(from_node)
+        # # converting to adjacency list
+        # adjacency_list = {}
+        # for i in range(n):
+        #     adjacency_list[i] = []
+        
+        # for item in edges:
+        #     from_node = item[0]
+        #     to_node = item[1]
 
-        height_dict = {}
-        visited_array = n * [False]
+        #     adjacency_list[from_node].append(to_node)
+        #     adjacency_list[to_node].append(from_node)
 
-        def calculateHeight(currNode: int, visited_array: List[int]) -> int:
-            visited_array[currNode] = True
-            neighbors = adjacency_list[currNode]
+        # height_dict = {}
+        # visited_array = n * [False]
 
-            all_been_visited = True
-            for item in neighbors:
-                if visited_array[item] == False:
-                    all_been_visited = False
-                    break
-            if all_been_visited:
-                return 1
-            else:
-                biggerHeight = 0
-                for item in neighbors:
-                    if visited_array[item] == False:
-                        currHeight = calculateHeight(item, visited_array)
-                        if currHeight > biggerHeight:
-                            biggerHeight = currHeight
-                return biggerHeight + 1
+        # def calculateHeight(currNode: int, visited_array: List[int], height_map) -> int:
+        #     visited_array[currNode] = True
+        #     if currNode in height_map:
+        #         return height_map[currNode]
+        #     else:
+        #         neighbors = adjacency_list[currNode]
+        #         all_been_visited = True
+        #         for item in neighbors:
+        #             if visited_array[item] == False:
+        #                 all_been_visited = False
+        #                 break
+        #         if all_been_visited:
+        #             height_map[currNode] = 1
+        #         else:
+        #             biggerHeight = 0
+        #             for item in neighbors:
+        #                 if visited_array[item] == False:
+        #                     currHeight = calculateHeight(item, visited_array, height_map)
+        #                     if currHeight > biggerHeight:
+        #                         biggerHeight = currHeight
+        #             height_map[currNode] = biggerHeight + 1
+        #     print(height_map)
+        #     return height_map[currNode]
         
     
-        for i in range(n):
-            currHeight = calculateHeight(i, visited_array.copy())
+        # for i in range(n):
+        #     currHeight = calculateHeight(i, visited_array.copy(), {})
+        #     if currHeight in height_dict:
+        #         height_dict[currHeight].append(i)
+        #     else:
+        #         height_dict[currHeight] = [i]
 
-            
-            if currHeight in height_dict:
-                height_dict[currHeight].append(i)
-            else:
-                height_dict[currHeight] = [i]
-
-        minHeight = min(list(height_dict.keys()))
-        return height_dict[minHeight]
+        # minHeight = min(list(height_dict.keys()))
+        # return height_dict[minHeight]
 
 
             
