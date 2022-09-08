@@ -14,13 +14,11 @@ def getMostVisited(n, sprints):
                 
                 curr = run_map[j]
                 run_map[j] = curr + 1
-        elif start > end:
-            j = start
-            while j >= end:
-                
+        elif end < start:
+            for j in range(start, end - 1, -1):
+                # print(str(j))
                 curr = run_map[j]
                 run_map[j] = curr + 1
-                j = j - 1
 
     curr_max = 0
     result = 0
@@ -33,3 +31,4 @@ def getMostVisited(n, sprints):
 
 
 print(getMostVisited(5,[2,4,1,3]))
+
