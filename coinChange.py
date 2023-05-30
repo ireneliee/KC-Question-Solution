@@ -1,49 +1,44 @@
 class Solution(object):
     def coinChange(self, coins, amount):
 
-        
-        min_coins_map = {}
+        cache = {}
         smallest_coin = min(coins)
 
-        if amount == 0:
-            return 0
-        elif amount < smallest_coin:
-            return -1
+        def findMinCoin(amount):
+            print('Finding the min coins needed for amount ' + str(amount))
 
-        for coin in coins:
-            min_coins_map[coin] = 1
+            if amount == 0:
+                return 0
 
-        def findMinCoins(target):
-            print('Current target is '+ str(target))
-            print(min_coins_map)
-
-            stop = target // 2
-            currMinCoins = 2**63-1
-
-            for i in range(1, stop + 1):
-                remaining = target - i
-
-                if i < target and remaining < target and min_coins_map[i] != -1 and min_coins_map[remaining] != -1:
-                    currMinCoins = min(currMinCoins, min_coins_map[i] + min_coins_map[remaining])
+            if amount in cache:
+                return cache[amount]
             
-            if currMinCoins == 2**63-1:
+            if amount < smallest_coin:
                 return -1
-            else:
-                return currMinCoins
 
-        for target in range(0, amount + 1):
-            if target < smallest_coin:
-                min_coins_map[target] = -1
+            min_coin = 2**31-1
+
+            for coin in coins:
+                print('Currently for coin ' + str(coin))
+                curr_coin = findMinCoin(amount - coin)
+                if curr_coin < min_coin and curr_coin != -1:
+                    print('updating min coin to ' + str(curr_coin))
+                    min_coin = curr_coin
+
             
-            elif target not in coins:
-                min_coins_map[target] = findMinCoins(target)
+            if min_coin != 2**31-1:
+                cache[amount] = min_coin + 1
+                return min_coin + 1
+            else:
+                cache[amount] = -1
+                return -1
         
+        print('Cache is ' + str(cache))
         
-        
-        return min_coins_map[amount]
+        return findMinCoin(amount)
 
 
-coins = [1,3,5]
-amount = 11
+coins = [261,411,27,78,61]
+amount = 5456
 s = Solution()
 print(s.coinChange(coins, amount))
