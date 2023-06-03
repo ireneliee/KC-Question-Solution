@@ -1,39 +1,72 @@
 from collections import deque
 
 class Solution(object):
-    def isOnGrid(self,r, c, grid):
-        return 0 <= r < len(grid) and 0 <= c < len(grid[0])
-
     def orangesRotting(self, grid):
-        n = len(grid)
-        m = len(grid[0])
-        time = -1
-        fresh = 0
+        lenX = len(grid)
+        lenY = len(grid[0])
+        currentFreshOrange = 0
+        directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+        visited = [[False for _ in range(lenY)] for _ in range(lenX)]
+
+        bfs_q = deque()
+
+        EMPTY = 0
+        FRESH = 1
+        ROTTEN = 2
+
+        def isOrange(x):
+            if x != EMPTY:
+                return True
+            else:
+                return False 
+
+        for i in range(lenX):
+            for j in range(lenY):
+                if grid[i][j] == FRESH:
+                        currentFreshOrange += 1
+                elif grid[i][j] == ROTTEN:
+                     bfs_q.append([i, j, 0])
         
-        rotten = deque()
-        
-        for r in range(n):
-            for c in range(m):
-                val = grid[r][c]
-                if val == 2:
-                    rotten.append((r, c))
-                elif val == 1:
-                    fresh += 1
-                    
-        if not fresh:
+        if currentFreshOrange == 0:
             return 0
         
-        while rotten:
-            for _ in range(len(rotten)):
-                r, c = rotten.popleft()
-                for newR, newC in [(r + 1, c), (r - 1, c), (r, c + 1), (r, c - 1)]:
-                    if self.isOnGrid(newR, newC, grid) and grid[newR][newC] == 1:
-                        grid[newR][newC] = 2
-                        rotten.append((newR, newC))
-                        fresh -= 1
-            time += 1
-                        
-        if fresh:
-            return -1
-        return time
+        
+        
+        while bfs_q:
+             popped = bfs_q.popleft()
+
+             curr_x = popped[0]
+             curr_y = popped[1]
+             curr_time = popped[2]
+
+             visited[curr_x][curr_y] = True
+
+             if grid[curr_x][curr_y] == FRESH:
+                grid[curr_x][curr_y] == ROTTEN
+                currentFreshOrange = currentFreshOrange - 1
+
+                if currentFreshOrange == 0:
+                     return curr_time
+
+             for direction in directions:
+                  new_x = curr_x + direction[0]
+                  new_y = curr_y + direction[1]
+
+                  if 0 <= new_x < lenX and 0 <= new_y < lenY and isOrange(grid[new_x][new_y]) and not visited[new_x][new_y]:
+                       bfs_q.append([new_x, new_y, curr_time + 1])
+                       visited[new_x][new_y] = True
+        
+        return -1
+            
+
+s = Solution()
+grid = [[0,2]]
+print(str(s.orangesRotting(grid)))
+
+        
+        
+        
+
+
+
         
