@@ -2,67 +2,59 @@ from typing import List
 
 
 class Solution:
-    def search(self, nums: List[int], target: int) -> int:
-        first_num = nums[0]
-        last_num = nums[-1]
+    def search(self, nums, target) -> int:
+        firstNum = nums[0]
+        lastNum = nums[-1]
 
+        lengthOfNus = len(nums)
 
-        def binarySearchPivotIndex(l, r):
-            
-            
-            while l <= r:
-                # print('l is ' + str(l))
-                # print('r is ' + str(r))
-
-                mid = (l + r) // 2
-
-                if mid + 1 < len(nums) and nums[mid] > nums[mid + 1]:
-                    return mid
-                elif mid + 1 < len(nums) and nums[mid] < nums[mid + 1] and nums[mid] >= first_num:
-                    return binarySearchPivotIndex(mid + 1, r)
-                elif mid + 1 < len(nums) and nums[mid] < nums[mid + 1] and nums[mid] <= last_num:
-                    return binarySearchPivotIndex(l, mid - 1)
-                elif mid == l and mid == r:
-                    return len(nums) - 1
-
-            return -1
-        # print('Finding pivot index...')
-        pivotIndex = binarySearchPivotIndex(0, len(nums) - 1)
-        # print('Pivot is ' + str(pivotIndex))
+    
         
-        def normalBinarySearch(arr, l, r):
+        def findNumber():
+            low = 0
+            high = len(nums) - 1
 
-            while l <= r:
-                mid = (l + r) // 2
-                if arr[mid] == target:
+            while low <= high:
+                mid = (low + high) // 2
+                print('Mid is ' + str(nums[mid]))
+                if target == nums[mid]:
                     return mid
-                elif target > arr[mid]:
-                    l = mid + 1
+                elif target < nums[mid]:
+                    print('Target is smaller than mid')
+                    if target >= firstNum:
+                        print('Search to the left')
+                        high = high - 1
+                    else:
+                        print('Search to the right')
+                        low = low + 1 
                 else:
-                    r = mid - 1
-            return -1
-        
-        left = nums[:pivotIndex + 1]
-        right = []
-        if pivotIndex != len(nums) - 1:
-            right = nums[pivotIndex + 1 : ]
-        # print('pivot index is ' + str(pivotIndex))
-        # print('left is ' + str(left))
-        # print('right is ' + str(right))
-        left_target_index = normalBinarySearch(left, 0, len(left) - 1)
-        # print('left target index is ' + str(left_target_index))
-        right_target_index = normalBinarySearch(right, 0 , len(right) - 1)
-        # print('right target index is ' + str(right_target_index))
+                    print('Target is larger than mid')
+                    if target < firstNum:
+                        print('Search to the right')
+                        low = low + 1
+                    else:
+                        print('Search to the right')
+                        high = high - 1
 
-        if left_target_index == -1 and right_target_index == -1:
+            return -1 # not there bro
+        
+        indexInRotatedArray = findNumber()
+
+        if indexInRotatedArray == -1:
             return -1
-        elif left_target_index != -1:
-            return left_target_index
-        else:
-            return len(left) + right_target_index
+            
+        
+        print('------------------------')
+        print('Index is ' + str(indexInRotatedArray))
+
+        # orig + pivot + 1 = rigged
+
+        return indexInRotatedArray
+    
+        
 
 
 sol = Solution()
-nums = [1]
-target_index = sol.search(nums, 0)
+nums = [4,5,6,7,8,1,2,3]
+target_index = sol.search(nums, 8)
 print('Target index is ' + str(target_index))

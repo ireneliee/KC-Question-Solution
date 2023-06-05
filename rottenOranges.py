@@ -30,8 +30,6 @@ class Solution(object):
         if currentFreshOrange == 0:
             return 0
         
-        
-        
         while bfs_q:
              popped = bfs_q.popleft()
 
