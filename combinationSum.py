@@ -1,37 +1,20 @@
+import copy
+class Solution(object):
+    def combinationSum(self, candidates, target):
+        pool = set()
 
-from typing import List
-
-
-class Solution:
-    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
-
-        result = []
-
-        candidates.sort()
-
-        def helper(i: int, currTar: int, currList: List[int]):
-            currSum = currTar - candidates[i]
-            if currSum == 0:
-                currList.append(candidates[i])
-                result.append(currList)
-                return
-            elif currSum < 0:
+        def getCombi(currSum, numbers):
+            
+            if currSum == target:
+                tupled = tuple(numbers)
+                if tupled not in pool:
+                    pool.add(tupled)
+            elif currSum > target:
                 return
             else:
-                currList.append(candidates[i])
-                for k in range(i, len(candidates)):
-                    helper(k, currSum, currList.copy())
-        
-        for i in range(len(candidates)):
-            helper(i, target, [])
+                for item in candidates:
+                    deep_copy = copy.deepcopy(numbers)
+                    deep_copy.append(item)
 
-        return result
-        
-        
+                    getCombi(currSum + item, deep_copy)
 
-sol = Solution()
-candidates = [2]
-target = 1
-print(sol.combinationSum(candidates, target))
-
-        
