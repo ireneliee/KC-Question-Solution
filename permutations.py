@@ -1,29 +1,30 @@
-from typing import List
+import copy
 
+class Solution(object):
+    def permute(self, nums):
+        len_nums = len(nums)
 
-class Solution:
-    def permute(self, nums: List[int]) -> List[List[int]]:
         result = []
-        def permuteHelper(currList: List[int]):
-            if len(currList) == len(nums):
-                result.append(currList)
-                print('current result is ' + str(result))
-            else:
-                
-                for i in range(len(nums)):
-                    if nums[i] not in currList:
-                        print('appending ' + str(nums[i]) + ' to currlist' + str(currList))
-                        currList.append(nums[i])
-                        permuteHelper(currList.copy())
-                        currList.pop()
-        
-            
 
-        for i in range(len(nums)):
-            permuteHelper([nums[i]])
+        def find(currList, total):
+            if currList and total == len_nums:
+                result.append(currList)
+            else:
+                for item in nums:
+                    if item not in currList:
+                        deep_copy = currList[:]
+                        deep_copy.append(item)
+
+                        find(deep_copy, total + 1)
+        
+        find([], 0)
+        
         return result
 
-
-sol = Solution()
+# Input: nums = [1,2,3]
+# Output: [[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]]
+s = Solution()
 nums = [1]
-print(sol.permute(nums))
+print(s.permute(nums))
+
+            
