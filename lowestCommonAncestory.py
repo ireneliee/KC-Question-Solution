@@ -9,14 +9,10 @@ class Solution(object):
     def lowestCommonAncestor(self, root, p, q):
         
         def findNumber(node, target):
-            if node == None:
-                return False
-            if node == target:
+            if target.val >= node.val:
                 return True
-            elif node.left == None and node.right == None:
+            else:
                 return False
-            
-            return findNumber(node.left, target) or findNumber(node.right, target)
         
         def findRoot(node):
             print('When node is ' + str(node.val))

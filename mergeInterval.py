@@ -3,8 +3,7 @@ class Solution(object):
         result = []
         interval_len = len(intervals)
 
-
-        
+        intervals.sort()
         counter = 0
 
         start = intervals[0][0]
