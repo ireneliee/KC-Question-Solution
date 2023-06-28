@@ -1,68 +1,89 @@
-from typing import List
+class Node(object):
+    def __init__(self, val):
+        self.val = val
+        self.neighbors = set()
 
+    def addEdge(self, neighbor):
+        self.neighbors.add(neighbor)
 
-class Solution:
-    def accountsMerge(self, accounts: List[List[str]]) -> List[List[str]]:
-        # list of nodes
-        nodes = set()
-        # hashmap mapping the email owner & email
-        email_dict = {}
-        # adjacency list to store the graph
-        adjacency_list = {}
-        
-        # setting up the adjacency lsit
-        for i in range(len(accounts)):
-            account_owner = accounts[i][0]
-            email_list = accounts[i][1:]
+class Solution(object):
+    def accountsMerge(self, accounts):
+        def dfs(start):
+            list_of_graph_email = []
+            stack = [start]  # Initialize stack with the starting vertex
+
+            while stack:
+                vertex = stack.pop()  # Get the next vertex from the stack
+
+                if not visited_dict[vertex.val]:
+                    list_of_graph_email.append(vertex.val)  # Process the vertex
+                    visited_dict[vertex.val] = True
+
+                    # Add unvisited neighbors of the current vertex to the stack
+                    neighbors = vertex.neighbors
+                    for neighbor in neighbors:
+                        if not visited_dict[neighbor.val]:
+                            stack.append(neighbor)
             
-            for j in range(len(email_list)):
-                nodes.add(email_list[j])
-                if email_list[j] not in adjacency_list:
-                    email_dict[email_list[j]] = account_owner
-                    all_email_without_one = email_list.copy()
-                    all_email_without_one.remove(email_list[j])
-                    adjacency_list[email_list[j]] = set(all_email_without_one)
-                    
-                else:
-                    all_email_without_one = email_list.copy()
-                    all_email_without_one.remove(email_list[j])
-                    curr_set_email = set(all_email_without_one)
-                    adjacency_list[email_list[j]] = adjacency_list[email_list[j]].union(curr_set_email)
-        
-        
-        list_of_nodes = list(nodes)
-        visited = {}
-        #setting up visited hashmap
-        for i in range(len(list_of_nodes)):
-            visited[list_of_nodes[i]] = False
+            return list_of_graph_email
 
         result = []
-        full_email_list = []
-
-        def dfs(node):
-            if visited[node] == False:
-                full_email_list.append(node)
-                visited[node] = True
-                set_of_neighbors = adjacency_list[node]
-                for item in set_of_neighbors:
-                    dfs(item)
-                    
-
         
-        
+        email_node_dict = {}
+        visited_dict = {}
+        email_name_dict = {}
 
-        for item in nodes:
-            if visited[item] == False:
-                dfs(item)
-                full_email_list.sort()
-                full_email_list = [email_dict[item]] + full_email_list
-                result.append(full_email_list)
-                full_email_list = []
+        # prep the graph
+        for single_account in accounts:
+            name = single_account[0]
+            new_nodes = []
 
-                    
+            for i in range(1, len(single_account)):
+                email = single_account[i]
+                if email in email_node_dict:
+                    new_nodes.append(email_node_dict[email])
+                else:
+                    email_node = Node(email)
+                    new_nodes.append(email_node)
+                    email_node_dict[email] = email_node
+
+                    email_name_dict[email] = name
+            
+            # connect the first node with the other nodes
+            first_node = new_nodes[0]
+
+            for i in range(1, len(new_nodes)):
+                first_node.addEdge(new_nodes[i])
+
+        # prep the visited_dict
+        for email in email_node_dict:
+            visited_dict[email] = False
+
+        # visit all the nodes using dfs. If they have yet to be visited, dfs, and add the name and sorted list into result. Otherwise, ignore
+
+        for email in email_node_dict:
+            if not visited_dict[email]:
+                email_list = dfs(email_node_dict[email])
+                email_owner = email_name_dict[email]
+                unique_account = [email_owner]
+
+                email_list.sort()
+
+                unique_account.extend(email_list)
+
+                result.append(unique_account)
+
+
         return result
 
-sol = Solution()
-accounts = [["John","johnsmith@mail.com","john_newyork@mail.com"],["John","johnsmith@mail.com","john00@mail.com"],["Mary","mary@mail.com"],["John","johnnybravo@mail.com"]]
-print(sol.accountsMerge(accounts))
-                    
+            
+            
+            
+            
+
+
+s = Solution()
+accounts = [["David","David0@m.co","David4@m.co","David3@m.co"],["David","David5@m.co","David5@m.co","David0@m.co"],["David","David1@m.co","David4@m.co","David0@m.co"],["David","David0@m.co","David1@m.co","David3@m.co"],["David","David4@m.co","David1@m.co","David3@m.co"]]
+print(s.accountsMerge(accounts))
+print(len(s.accountsMerge(accounts)))
+
