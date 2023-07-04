@@ -1,24 +1,24 @@
-from turtle import left
-from typing import List, Set
+from collections import List
 
 
 class Solution:
     def canPartition(self, nums: List[int]) -> bool:
-        total = sum(nums)
-        half = total / 2
+        if sum(nums) % 2:
+            return False
         
-        result_set = set()
-        result_set.add(0)
+        dp = set()
+        dp.add(0)
+        target = sum(nums) // 2
 
         for i in range(len(nums) - 1, -1, -1):
-            cop = list(result_set)
-
-            for item in cop:
-                result_set.add(item + nums[i])
-            if half in result_set:
-                return True
+            nextDP = set()
+            for t in dp:
+                nextDP.add(t + nums[i])
+                nextDP.add(t)
+            
+            dp = nextDP
         
-        return False
+        return True if target in dp else False
 
         
 
@@ -27,5 +27,5 @@ class Solution:
             
 
 sol = Solution()
-nums = [1,3,5,11]
+nums = [1,5,5,11]
 print(sol.canPartition(nums))

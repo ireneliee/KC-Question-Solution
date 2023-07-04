@@ -1,31 +1,45 @@
 class Solution:
     def myAtoi(self, s: str) -> int:
-        numb = ""
-        isNegative = False
-        isInvalid = False
-        for i in range(len(s)):
-            if 48 <= ord(s[i]) <= 57:
-                numb = numb + s[i]
-            elif s[i] == '-':
-                isNegative = True
-            elif (s[i] < 48 or s[i] > 57) and numb == "":
-                isInvalid = True
-        
-        if isInvalid:
+        if s == "":
             return 0
-        if isNegative:
-            numb_result = int(numb) * -1
-        else:
-            numb_result = int(numb)
-        # [-231, 231 - 1]   
+        
+        parsed = ""
+        foundNum = False
+        for car in s:
+            if car.isnumeric() or car == "+" or car == "-":
+                parsed = parsed + car
+                foundNum = True
+            else:
+                if car == " " and foundNum:
+                    break
+                elif car != " ":
+                    break
+        print("Step A: " + parsed)
 
-        if numb_result < -1 * pow(2,31):
-            return pow(2,31) * -1
-        elif numb_result > pow(2, 31):
-            return pow(2, 31)
+        if len(parsed) == 0:
+            return 0
+        
+        if len(parsed) >= 2 and not parsed[1].isnumeric():
+            return 0
+        try:
+            result = int(parsed)
+        except:
+            return 0
+        
+        print("Step B: " + str(result))
 
-        return numb_result
+        if result < -2 ** 31:
+            result = -2 ** 31
+        elif result > 2 ** 31 - 1:
+            result = 2 ** 31 - 1
+        
+        return result
+        
+        
+            
+        
+
 
 sol = Solution()
-s = "4193 with words"
+s = "   +0 123"
 print(sol.myAtoi(s))
