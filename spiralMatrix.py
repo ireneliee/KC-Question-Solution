@@ -24,13 +24,11 @@ class Solution:
         # right, down, left, up
         node_x = [0, 1, 0, -1]
         node_y = [1, 0, -1, 0]
-
         
         def spiral(row, col, state, count):
 
             if count >= max_size:
                 return
-            
             result.append(matrix[row][col])
             visited[row][col] = True
             count = count + 1

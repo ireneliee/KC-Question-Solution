@@ -1,28 +1,31 @@
-from typing import List
-
+import copy
 
 class Solution:
-    def subsets(self, nums: List[int]) -> List[List[int]]:
+    def subsets(self, arr):
         result = []
-        curr = []
-        def recurse(index: int):
-            if index >= len(nums):
-                result.append(curr.copy())
+        result.append([])
+        n = len(arr)
+        def add(curr, last_i):
+            if last_i >= n:
                 return
             
-            else:
-                curr.append(nums[index])
-                recurse(index + 1)
-                curr.pop()
-                recurse(index + 1)
-        
-        recurse(0)
+            print('Curr is ' + str(curr))
+            print('Curr last_ i number is ' + str(arr[last_i]))
+            deep_copy = copy.deepcopy(curr)
+            deep_copy.append(arr[last_i])
+            result.append(deep_copy)
+            print('Adding deep copy ' + str(deep_copy))
 
+            for i in range(last_i + 1, n):
+                add(deep_copy, i)
+        
+        for i in range(len(arr)):
+            add([], i)
         return result
 
 solution = Solution()
 
 # test case
-nums = [1, 2, 3]
+nums = [1,2,3]
 
 print(solution.subsets(nums))
