@@ -1,37 +1,52 @@
-from typing import List
+import copy
 
+class Solution(object):
+    def exist(self, board, word):
 
-class Solution:
-    def exist(self, board: List[List[str]], word: str) -> bool:
-        rows, cols = len(board), len(board[0])
-        path = set()
+        x = [0, 1, -1, 0]
+        y = [1, 0, 0, -1]
 
-        def dfs(r, c, i):
-            if i == len(word):
-                return True
-            if(r < 0 or c <0 or r >= rows or c >= cols or word[i] != board[r][c] or (r, c) in path):
+        m = len(board)
+        n = len(board[0])
+
+        def visit(i, j, currIndex, visitedSet):
+            if i < 0 or i >= m or j < 0 or j >= n:
                 return False
             
-            path.add((r,c))
+            if board[i][j] != word[currIndex]:
+                return False
+            if (i, j) in visitedSet:
+                return False
+            if board[i][j] == word[currIndex] and currIndex == len(word) - 1:
+                return True
+            
+            currIndex = currIndex + 1
 
-            res = (
-                dfs(r + 1, c, i + 1) or
-                dfs(r - 1, c, i + 1) or
-                dfs(r, c + 1, i + 1) or
-                dfs(r, c - 1, i + 1))
-            path.remove((r, c))
-            return res
+            visitedSet.add((i, j))
+
+            for index in range(4):
+                result = visit(x[index] + i, y[index] + j, currIndex, visitedSet)
+                if result:
+                    visitedSet.remove((i, j))
+                    return True
+            visitedSet.remove((i, j))
+            return False
+
         
-        for r in range(rows):
-            for c in range(cols):
-                if dfs(r, c, 0): return True
+        for i in range(m):
+            for j in range(n):
+                if board[i][j] == word[0]:
+                    if visit(i, j, 0, set()):
+                        return True
+        
         return False
-
-
-        
+            
+     
 
 sol = Solution()
-test_case_1 = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]]
-test_case_2 = "SEE"
+test_case_1 = [["b","b","b","a","b","b"],["b","a","b","b","a","a"],["b","a","b","a","a","a"],["a","a","a","a","b","a"],["a","a","b","b","b","a"],["a","a","b","b","a","a"]]
+test_case_2 = "abbbbaabbbbb"
+
 
 print(sol.exist(test_case_1, test_case_2))
+print(len(test_case_2))

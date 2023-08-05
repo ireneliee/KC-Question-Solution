@@ -7,42 +7,54 @@ class Solution:
         len_of_anagram = len(p)
         len_of_string = len(s)
 
-        sorted_char_list = list(p)
-        sorted_char_list.sort()
+        if len_of_anagram > len_of_string:
+            return result
 
-        def anagramTest(s1):
-            s1 = list(s1)
-            s1.sort()
+        anagram_dict = {}
+        string_dict = {}
+        for i in range(len_of_anagram):
+            anagram_dict[p[i]] = anagram_dict.get(p[i], 0) + 1
+            string_dict[s[i]] = string_dict.get(s[i], 0) + 1
 
-            return s1 == sorted_char_list
+        if anagram_dict == string_dict:
+            result.append(0)
         
-        # sliding window
-        start = 0
-        end = len_of_anagram
+        print('Current anagram dict is ' + str(anagram_dict))
+        print('Current string dict is ' + str(string_dict))
 
-        while end <= len_of_string:
-            curr_str = s[start: end]
-            if anagramTest(curr_str):
-                result.append(start)
-                while True:
-                    end = end + 1
-                    if end < len_of_string and s[start] == s[end - 1]:
-                        start = start + 1
-                        result.append(start)
-                    else:
-                        start = start + 1
-                        break
-            else:
-                start = start + 1
-                end = end + 1
+        l = 0
+        
+        for r in range(len_of_anagram, len_of_string):
+            print('l is ', str(l))
+            print('r is ', str(r))
+            print('Before dict is ' + str(string_dict))
+            string_dict[s[l]] = string_dict[s[l]] - 1
+            string_dict[s[r]] = string_dict.get(s[r], 0) + 1
+            
 
+            if string_dict[s[l]] == 0:
+                string_dict.pop(s[l])
+            
+            if string_dict[s[r]] == 0:
+                string_dict.pop(s[r])
+            
+            print('After dict is ' + str(string_dict))
+
+            if anagram_dict == string_dict:
+                result.append(l + 1)
+            
+            l = l + 1
         
         return result
 
 
+
+        
+
+
 sol = Solution()
-s = "abab"
-p = "ab"
+s = "cbaebabacd"
+p = "abc"
 print(sol.findAnagrams(s, p))
 
         
