@@ -14,7 +14,7 @@ class Solution(object):
         print(word_dict)
 
         result = list(word_dict.values())
-        print(result)
+        return result
 
 s = Solution()
 strs = ["eat","tea","tan","ate","nat","bat"]
