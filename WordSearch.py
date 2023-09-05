@@ -9,27 +9,33 @@ class Solution(object):
         m = len(board)
         n = len(board[0])
 
+        cache = {}
+
         def visit(i, j, currIndex, visitedSet):
             if i < 0 or i >= m or j < 0 or j >= n:
                 return False
             
             if board[i][j] != word[currIndex]:
                 return False
+            if (i, j, currIndex) in cache:
+                return cache[(i, j, currIndex)]
             if (i, j) in visitedSet:
                 return False
             if board[i][j] == word[currIndex] and currIndex == len(word) - 1:
+                print('Fall here')
                 return True
             
             currIndex = currIndex + 1
 
-            visitedSet.add((i, j))
+            visited_set_copy = copy.deepcopy(visitedSet)
+            visited_set_copy.add((i, j))
 
             for index in range(4):
-                result = visit(x[index] + i, y[index] + j, currIndex, visitedSet)
+                result = visit(x[index] + i, y[index] + j, currIndex, visited_set_copy)
+                cache[(x[index] + i, y[index] + j, currIndex)] = result
                 if result:
-                    visitedSet.remove((i, j))
                     return True
-            visitedSet.remove((i, j))
+            
             return False
 
         

@@ -32,10 +32,7 @@ class WordDictionary(object):
         
         def search(currIndex, currDict, currNode):
             if currIndex >= len(word):
-                if currNode.isWord:
-                    return True
-                else:
-                    return False
+                return currNode.isWord
             
             if word[currIndex] == ".":
                 for item in currDict:
@@ -50,10 +47,6 @@ class WordDictionary(object):
                     return search(currIndex + 1, currDict[word[currIndex]].children, currDict[word[currIndex]])
         
         return search(0, self.treeRoot, None)
-
-
-        
-
 
 # Your WordDictionary object will be instantiated and called as such:
 obj = WordDictionary()
