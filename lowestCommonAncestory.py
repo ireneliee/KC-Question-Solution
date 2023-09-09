@@ -7,36 +7,23 @@ class TreeNode(object):
 
 class Solution(object):
     def lowestCommonAncestor(self, root, p, q):
-        
-        def findNumber(node, target):
-            if target.val >= node.val:
-                return True
-            else:
+        self.ans = None
+
+        def dfs(node):
+            if not node:
                 return False
-        
-        def findRoot(node):
-            print('When node is ' + str(node.val))
-            pIsLeft = False
-            qIsLeft = False
+            left = dfs(node.left)
+            right = dfs(node.right)
+            curr = node == p or node == q
 
-            pIsLeft = findNumber(node.left, p)
-            print('can find ' + str(p.val) + ' in left: ' + str(pIsLeft))
-            qIsLeft = findNumber(node.left, q)
-            print('can find ' + str(q.val) + ' in left: ' + str(qIsLeft))
-            if pIsLeft != qIsLeft:
-                return node
-
-            if pIsLeft == qIsLeft:
-                if node == p or node == q:
-                    return node
-                else:
-                    if pIsLeft:
-                        return findRoot(node.left)
-                    else:
-                        return findRoot(node.right)
-                    
-        return findRoot(root)
+            if (left and right) or (curr and left) or (curr and right):
+                self.ans = node
+                return
             
+            return left or right or curr
+
+        dfs(root)
+        return self.ans
 
 
 # three = TreeNode(3)
